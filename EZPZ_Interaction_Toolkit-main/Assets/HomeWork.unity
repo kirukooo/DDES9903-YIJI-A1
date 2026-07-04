@@ -10822,6 +10822,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 759bfa15d7efcb74e905d2c2c21b2b9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageAudioTrigger
+  showInfo: {fileID: 1914324472}
+  message: You found your voice again. The song is finally complete. But your voice
+    will keep echoing.
 --- !u!1 &1696136510
 GameObject:
   m_ObjectHideFlags: 0
