@@ -660,8 +660,9 @@ GameObject:
   - component: {fileID: 51036351}
   - component: {fileID: 51036355}
   - component: {fileID: 51036356}
+  - component: {fileID: 51036357}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: MicHold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -955,6 +956,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &51036357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51036350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b19fc9e2c9e28c94bae7bee1cef4a09c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MicHoldFollow
 --- !u!1 &66009510
 GameObject:
   m_ObjectHideFlags: 0
@@ -1263,8 +1276,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: The Unfinished Song. This room remembers it. A space about music, absence
-    and memories.
+  m_Text: "The Unfinished Song. \nThis room remembers it. \nA space about music,
+    absence and memories."
 --- !u!222 &86705257
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1756,7 +1769,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PromptDisplay
   targetUI: {fileID: 1914324472}
   targetText: {fileID: 1914324474}
-  message: Now,please pick up the microphoneagain.
+  message: Now,please pick up the microphone again.
 --- !u!114 &205799702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2906,191 +2919,6 @@ PhysicsMaterial:
   m_Bounciness: 0
   m_FrictionCombine: 0
   m_BounceCombine: 0
---- !u!1 &475013062
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 475013068}
-  - component: {fileID: 475013067}
-  - component: {fileID: 475013066}
-  - component: {fileID: 475013065}
-  - component: {fileID: 475013064}
-  - component: {fileID: 475013063}
-  m_Layer: 0
-  m_Name: Redio_TriggerZone
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &475013063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475013062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1396b80b79fff054fa98c4fb121a2ce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PromptDisplay
-  targetUI: {fileID: 1914324472}
-  targetText: {fileID: 1914324474}
-  message: "\u8BF7\u6253\u5F00\u5B83"
---- !u!114 &475013064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475013062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b4bcbc1ac451be4fa078b560e85f31f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractableTrigger
-  visibleAtRuntime: 0
-  filterString: 
-  allowUnfiltered: 1
-  excludeMode: 0
-  explicitExclusionList: []
-  onTriggerEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 475013063}
-        m_TargetAssemblyTypeName: PromptDisplay, Assembly-CSharp
-        m_MethodName: Show
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  deleteOnEnter: 0
-  disableOnEnter: 0
-  onTriggerExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 475013063}
-        m_TargetAssemblyTypeName: PromptDisplay, Assembly-CSharp
-        m_MethodName: Hide
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTriggerStay:
-    m_PersistentCalls:
-      m_Calls: []
-  subject: {fileID: 0}
-  triggerActive: 1
-  myRenderer: {fileID: 475013065}
-  contactList: []
---- !u!23 &475013065
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475013062}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_MaskInteraction: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &475013066
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475013062}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!33 &475013067
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475013062}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &475013068
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475013062}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.35, y: 1.78, z: 2.76}
-  m_LocalScale: {x: 2, y: 3, z: 2}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &512796222
 GameObject:
   m_ObjectHideFlags: 0
@@ -3273,7 +3101,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Do these fragments of past soundsfeel familiar? When you're ready,turn
+  m_Text: Do these fragments of past sounds feel familiar? When you're ready,turn
     on the speaker.
 --- !u!222 &513501373
 CanvasRenderer:
@@ -7417,8 +7245,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1140782020}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.007222728, y: 0.002863265, z: 0.09066269}
+  m_LocalPosition: {x: 0, y: 0, z: 0.03}
+  m_LocalScale: {x: 0.006243989, y: 0.0024752694, z: 0.07837716}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 86705255}
@@ -7426,8 +7254,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1, y: 0.106}
-  m_SizeDelta: {x: 105.718, y: 101.6892}
+  m_AnchoredPosition: {x: 1, y: 0.06685}
+  m_SizeDelta: {x: 139.266, y: 129.03748}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1190577678
 GameObject:
@@ -7978,7 +7806,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: You haven't sungfor a long time.
+  m_Text: You haven't sung for a long time.
 --- !u!222 &1298165304
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8012,7 +7840,7 @@ Transform:
   m_GameObject: {fileID: 1321803146}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.73195034, z: -0, w: 0.6813581}
-  m_LocalPosition: {x: -5.668, y: 0.86, z: 2.976}
+  m_LocalPosition: {x: -1.873, y: 0.06, z: 3.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8030,6 +7858,7 @@ Transform:
   - {fileID: 1573432320}
   - {fileID: 723004989}
   - {fileID: 1832302862}
+  - {fileID: 1397663983}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 94.1, z: 0}
 --- !u!1 &1353050932
@@ -8630,17 +8459,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1397663982}
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 3.201}
-  m_LocalScale: {x: 0.017036656, y: 0.017036654, z: 0.017036656}
+  m_LocalRotation: {x: -0, y: -0.99935997, z: -0, w: -0.035774138}
+  m_LocalPosition: {x: 0, y: 0, z: -0.077929184}
+  m_LocalScale: {x: 0.01703665, y: 0.017036654, z: 0.01703665}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 513501371}
-  m_Father: {fileID: 7457159945624359002}
+  m_Father: {fileID: 1321803147}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.73, y: 2.55}
+  m_AnchoredPosition: {x: -0.21998882, y: 1.69}
   m_SizeDelta: {x: 159.8864, y: 73.3877}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1397663984
@@ -9748,6 +9577,140 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1486072216}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1489201313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1489201317}
+  - component: {fileID: 1489201316}
+  - component: {fileID: 1489201315}
+  - component: {fileID: 1489201314}
+  - component: {fileID: 1489201318}
+  m_Layer: 0
+  m_Name: WuTaiTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1489201314
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489201313}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1489201315
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489201313}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1489201316
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489201313}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1489201317
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489201313}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.11, y: 0.84606, z: 0.84}
+  m_LocalScale: {x: 3.4709563, y: 1, z: 8.540181}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1489201318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489201313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0812378f766504ebe9830431ee1268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  stageSpotlight: {fileID: 1511861995}
+  stageLightCircle: {fileID: 1690554185}
+  showInfo: {fileID: 1914324472}
+  message: 'Now, please step onto the stage.
+
+    This song is still waiting for
+    you to finish it.
+
+    Please walk into the spotlight.'
 --- !u!1 &1504418978
 GameObject:
   m_ObjectHideFlags: 0
@@ -9870,6 +9833,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1511861996}
   - component: {fileID: 1511861995}
+  - component: {fileID: 1511861997}
   m_Layer: 0
   m_Name: StageSpotlight
   m_TagString: Untagged
@@ -9957,6 +9921,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1511861997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1511861994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &1511902984
 GameObject:
   m_ObjectHideFlags: 0
@@ -10388,10 +10381,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeakerButtonInteraction
   showInfo: {fileID: 1914324472}
-  message: Now, step onto the stage. The song is still waiting for you to finish
-    it.
+  message: Now, please step onto the stage.  This song is still waiting for you to
+    finish it.  Please walk into the spotlight.
   stageSpotlight: {fileID: 1511861995}
-  stageTrigger: {fileID: 1690554186}
+  stageTrigger: {fileID: 0}
 --- !u!114 &1587682755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10770,7 +10763,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1690554188}
   - component: {fileID: 1690554187}
-  - component: {fileID: 1690554186}
+  - component: {fileID: 1690554189}
   m_Layer: 0
   m_Name: StageLightCircle
   m_TagString: Untagged
@@ -10778,20 +10771,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1690554186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1690554185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fdd263159d45b641a9e9514daa1c5df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StageTrigger
-  triggerRadius: 1.5
-  playerTag: Player
 --- !u!136 &1690554187
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10831,6 +10810,18 @@ Transform:
   - {fileID: 1415882456}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1690554189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690554185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 759bfa15d7efcb74e905d2c2c21b2b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageAudioTrigger
 --- !u!1 &1696136510
 GameObject:
   m_ObjectHideFlags: 0
@@ -11202,7 +11193,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PromptDisplay
   targetUI: {fileID: 1914324472}
   targetText: {fileID: 1914324474}
-  message: "\u201CPleasepickup the sheet music and put itback on the keyboard's musicrest."
+  message: Please pick up the sheet music and put it back on the keyboard's music
+    rest.
 --- !u!114 &1721781157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13375,9 +13367,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 631063005}
-    - targetCorrespondingSourceObject: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1397663983}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7457159944228665139, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       insertIndex: -1
@@ -13419,8 +13408,8 @@ SceneRoots:
   - {fileID: 1738188741}
   - {fileID: 1721781161}
   - {fileID: 205799706}
-  - {fileID: 475013068}
   - {fileID: 1914914817}
   - {fileID: 1321803147}
   - {fileID: 1511861996}
   - {fileID: 1690554188}
+  - {fileID: 1489201317}

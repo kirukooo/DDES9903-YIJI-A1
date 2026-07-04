@@ -21,7 +21,6 @@ public class SpeakerButtonInteraction : MonoBehaviour
         if (interactable != null)
         {
             interactable.onPrimaryInteract.AddListener(OnButtonPressed);
-            interactable.hoverText = "点击播放音乐";
         }
 
         for (int i = 0; i < 3; i++)
@@ -40,7 +39,15 @@ public class SpeakerButtonInteraction : MonoBehaviour
         audioSources[0].clip = Resources.Load<AudioClip>("AudioClips/Guitar");
         audioSources[1].clip = Resources.Load<AudioClip>("AudioClips/Piano");
         audioSources[2].clip = Resources.Load<AudioClip>("AudioClips/Vocal");
-
+        if (showInfo != null)
+        {
+            showInfo.SetActive(true);
+            var text = showInfo.GetComponent<Text>();
+            if (text == null)
+                text = showInfo.GetComponentInChildren<Text>();
+            if (text != null)
+                text.text = message;
+        }
         foreach (var src in audioSources)
             src.Play();
 
@@ -60,15 +67,7 @@ public class SpeakerButtonInteraction : MonoBehaviour
             yield return null;
         }
 
-        if (showInfo != null)
-        {
-            showInfo.SetActive(true);
-            var text = showInfo.GetComponent<Text>();
-            if (text == null)
-                text = showInfo.GetComponentInChildren<Text>();
-            if (text != null)
-                text.text = message;
-        }
+     
 
         if (stageSpotlight != null)
             stageSpotlight.gameObject.SetActive(true);

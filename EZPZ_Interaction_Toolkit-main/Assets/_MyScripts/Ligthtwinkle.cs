@@ -9,7 +9,7 @@ public class Ligthtwinkle : MonoBehaviour
     private float baseIntensity;
     public float flashIntensity = 8f;
     public float flashInterval = 0.15f;
-
+    
     void Awake()
     {
         pointLight = GetComponent<Light>();
