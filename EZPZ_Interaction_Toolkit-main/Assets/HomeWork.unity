@@ -10422,7 +10422,7 @@ MonoBehaviour:
   onHoverExit:
     m_PersistentCalls:
       m_Calls: []
-  hoverText: "\u70B9\u51FB\u64AD\u653E\u97F3\u4E50"
+  hoverText: 
   customTouchDistance: -1
   heldText: 
   restrictSecondaryToHeldOnly: 0
