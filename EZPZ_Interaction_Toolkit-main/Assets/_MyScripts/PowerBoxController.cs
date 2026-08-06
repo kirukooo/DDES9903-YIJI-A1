@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
@@ -7,6 +8,7 @@ public class PowerBoxController : MonoBehaviour
 {
     [Header("Indicator Light")]
     public Renderer indicatorLightRenderer;
+    public Color disabledColor = new Color(0.3f, 0.3f, 0.3f);
     public Color offColor = new Color(1f, 0.1f, 0.1f);
     public Color onColor = new Color(0.1f, 1f, 0.15f);
     public float emissionIntensity = 3f;
@@ -16,12 +18,16 @@ public class PowerBoxController : MonoBehaviour
     public float leverAngleOff = -30f;
     public float leverAngleOn = 30f;
     public float leverAnimDuration = 0.4f;
+    public InteractableGeneral leverInteractable;
 
     [Header("Labels")]
     public TextMeshProUGUI offLabelText;
     public TextMeshProUGUI onLabelText;
     public Color labelActiveColor = Color.white;
     public Color labelDimColor = new Color(0.3f, 0.3f, 0.3f);
+
+    [Header("Startup Delay")]
+    public float startupDelay = 20f;
 
     [Header("State")]
     public bool isOn = false;
@@ -36,10 +42,38 @@ public class PowerBoxController : MonoBehaviour
         if (indicatorLightRenderer != null)
             indicatorMat = indicatorLightRenderer.material;
 
-        ApplyVisualState();
-
         if (leverPivot != null)
             leverPivot.localRotation = Quaternion.Euler(leverAngleOff, 0, 0);
+
+        // Start disabled: gray light, lever not interactable
+        SetDisabledState();
+        StartCoroutine(StartupDelayRoutine());
+    }
+
+    private IEnumerator StartupDelayRoutine()
+    {
+        yield return new WaitForSeconds(startupDelay);
+        ApplyVisualState();
+        if (leverInteractable != null)
+            leverInteractable.enabled = true;
+    }
+
+    private void SetDisabledState()
+    {
+        if (indicatorMat != null)
+        {
+            indicatorMat.SetColor("_EmissionColor", Color.black);
+            indicatorMat.SetColor("_BaseColor", disabledColor);
+            indicatorMat.DisableKeyword("_EMISSION");
+        }
+
+        if (offLabelText != null)
+            offLabelText.color = labelDimColor;
+        if (onLabelText != null)
+            onLabelText.color = labelDimColor;
+
+        if (leverInteractable != null)
+            leverInteractable.enabled = false;
     }
 
     public void TogglePower()
