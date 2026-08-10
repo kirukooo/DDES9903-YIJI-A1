@@ -10768,6 +10768,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8b0ddad66975146b3969ba4259c4bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PaperDropAudio
+  doorAnimator: {fileID: 2018340305}
+  showInfo: {fileID: 1914324472}
+  showInfoText: {fileID: 1914324474}
+  message: The melody returned, but the final bars are still empty.
 --- !u!1 &1087317938
 GameObject:
   m_ObjectHideFlags: 0
