@@ -2914,6 +2914,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 776798722794610808, guid: df63664dbdd376b4298726771ab129fa, type: 3}
+      propertyPath: RotationSpeed
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 886374719924831829, guid: df63664dbdd376b4298726771ab129fa, type: 3}
       propertyPath: far clip plane
       value: 500
@@ -10516,6 +10520,7 @@ GameObject:
   - component: {fileID: 1067129188}
   - component: {fileID: 1067129187}
   - component: {fileID: 1067129190}
+  - component: {fileID: 1067129191}
   m_Layer: 0
   m_Name: Paper
   m_TagString: Untagged
@@ -10697,10 +10702,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 1067129191}
+        m_TargetAssemblyTypeName: PaperDropAudio, Assembly-CSharp
+        m_MethodName: PlayPiano
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1721781155}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -10726,6 +10743,18 @@ MonoBehaviour:
   originalUseGravity: 1
   moving: 0
   subCollliders: []
+--- !u!114 &1067129191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067129185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec8b0ddad66975146b3969ba4259c4bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaperDropAudio
 --- !u!1 &1087317938
 GameObject:
   m_ObjectHideFlags: 0
