@@ -1,4 +1,4 @@
-﻿using DG.Tweening;
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,310 +12,355 @@ public class AudioManager : MonoBehaviour
     {
         get
         {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<AudioManager>();
+                if (instance == null)
+                {
+                    var go = new GameObject("AudioManager");
+                    instance = go.AddComponent<AudioManager>();
+                    DontDestroyOnLoad(go);
+                }
+            }
             return instance;
         }
     }
 
-    private Dictionary<int, string> audioPathDict;      // 存放音频文件路径
+    private const string AUDIO_FOLDER = "AudioClips/";
 
     private AudioSource musicAudioSource;
+    private List<AudioSource> unusedPool;
+    private List<AudioSource> usedPool;
+    private Dictionary<string, AudioClip> clipCache;
 
-    private List<AudioSource> unusedSoundAudioSourceList;   // 存放可以使用的音频组件
+    [HideInInspector] public float musicVolume = 1;
+    [HideInInspector] public float soundVolume = 1;
 
-    private List<AudioSource> usedSoundAudioSourceList;     // 存放正在使用的音频组件
-
-    private Dictionary<int, AudioClip> audioClipDict;       // 缓存音频文件
-    [HideInInspector]
-    public float musicVolume = 1;
-    [HideInInspector]
-    public float soundVolume = 1;
-
-    private string musicVolumePrefs = "MusicVolume";
-
-    private string soundVolumePrefs = "SoundVolume";
-
-    private bool mymute = false;
-    private int poolCount = 3;         // 对象池数量
+    private bool muted = false;
+    private int poolCount = 5;
 
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
-        instance = this;
-
-        audioPathDict = new Dictionary<int, string>()       // 这里设置音频文件路径。需要修改。 TODO
+        if (instance != null && instance != this)
         {
-              { 1, "AudioClip/LampOn" },
-              { 2, "AudioClip/Bg" },
-              { 3, "AudioClip/BookshelfMoving" },
-              { 4, "AudioClip/Generic_Pickup_01" },
-              { 5, "AudioClip/Unlock01" },
-              { 6, "AudioClip/BookshelfMoving01" },
-              { 7, "AudioClip/Generic_Pickup_04" },
-              { 8, "AudioClip/New Objective 1" },
-              { 9, "AudioClip/jumpscare_01" },
-              { 10, "AudioClip/UnlockPadlock" },
-              { 11, "AudioClip/Big Explosion 04" },        
+            Destroy(gameObject);
+            return;
+        }
 
-        };
+        instance = this;
+        DontDestroyOnLoad(gameObject);
 
         musicAudioSource = gameObject.AddComponent<AudioSource>();
-        unusedSoundAudioSourceList = new List<AudioSource>();
-        usedSoundAudioSourceList = new List<AudioSource>();
-        audioClipDict = new Dictionary<int, AudioClip>();
-
+        unusedPool = new List<AudioSource>();
+        usedPool = new List<AudioSource>();
+        clipCache = new Dictionary<string, AudioClip>(StringComparer.OrdinalIgnoreCase);
     }
 
     void Start()
     {
-        // 从本地缓存读取声音音量
-        if (PlayerPrefs.HasKey(musicVolumePrefs))
-        {
-            musicVolume = PlayerPrefs.GetFloat(musicVolumePrefs);
-        }
-        if (PlayerPrefs.HasKey(soundVolumePrefs))
-        {
-            soundVolume = PlayerPrefs.GetFloat(soundVolumePrefs);
-        }
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1);
+        soundVolume = PlayerPrefs.GetFloat("SoundVolume", 1);
     }
 
     /// <summary>
-    /// 播放背景音乐
+    /// Load and cache a clip by name (file name under Resources/AudioClips/).
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="loop"></param>
-    public void PlayMusic(int id, bool loop = true)
+    private AudioClip GetClip(string name)
     {
-        // 通过Tween将声音淡入淡出
-        DOTween.To(() => musicAudioSource.volume, value => musicAudioSource.volume = value, 0, 0.5f).OnComplete(() =>
+        if (clipCache.TryGetValue(name, out var clip) && clip != null)
+            return clip;
+
+        clip = Resources.Load<AudioClip>(AUDIO_FOLDER + name);
+        if (clip == null)
         {
-            musicAudioSource.clip = GetAudioClip(id);
-            musicAudioSource.clip.LoadAudioData();
+            Debug.LogWarning($"[AudioManager] Clip not found: Resources/{AUDIO_FOLDER}{name}");
+            return null;
+        }
+
+        clipCache[name] = clip;
+        return clip;
+    }
+
+    #region Music
+
+    /// <summary>
+    /// Play background music by clip name, with fade transition.
+    /// </summary>
+    public void PlayMusic(string name, bool loop = true)
+    {
+        var clip = GetClip(name);
+        if (clip == null) return;
+
+        DOTween.To(() => musicAudioSource.volume, v => musicAudioSource.volume = v, 0, 0.5f).OnComplete(() =>
+        {
+            musicAudioSource.clip = clip;
             musicAudioSource.loop = loop;
             musicAudioSource.volume = musicVolume;
             musicAudioSource.Play();
-            DOTween.To(() => musicAudioSource.volume, value => musicAudioSource.volume = value, musicVolume, 0.5f);
+            DOTween.To(() => musicAudioSource.volume, v => musicAudioSource.volume = v, musicVolume, 0.5f);
         });
     }
 
-    public void PlayQueenSound(Action action = null, params int[] sounds)
+    public void StopMusic()
     {
-        StartCoroutine(PlaySound1(action, sounds));
+        DOTween.To(() => musicAudioSource.volume, v => musicAudioSource.volume = v, 0, 0.5f)
+            .OnComplete(() => musicAudioSource.Stop());
     }
 
-    IEnumerator PlaySound1(Action action, int[] sounds)
-    {
-        AudioSource audioSource = null;
-        if (unusedSoundAudioSourceList.Count != 0)
-        {
-            audioSource = UnusedToUsed();
-        }
-        else
-        {
-            AddAudioSource();
+    #endregion
 
-            audioSource = UnusedToUsed();
-        }
-        if (sounds.Length > 0)
+    #region Sound
+
+    /// <summary>
+    /// Play a sound effect by clip name.
+    /// </summary>
+    public void PlaySound(string name, Action onComplete = null)
+    {
+        var clip = GetClip(name);
+        if (clip == null) return;
+
+        var src = GetSource();
+        src.clip = clip;
+        src.volume = soundVolume;
+        src.mute = muted;
+        src.loop = false;
+        src.Play();
+        StartCoroutine(WaitEnd(src, onComplete));
+    }
+
+    /// <summary>
+    /// Play a sound with custom volume (0-1).
+    /// </summary>
+    public void PlaySound(string name, float volume, Action onComplete = null)
+    {
+        var clip = GetClip(name);
+        if (clip == null) return;
+
+        var src = GetSource();
+        src.clip = clip;
+        src.volume = Mathf.Clamp01(volume) * soundVolume;
+        src.mute = muted;
+        src.loop = false;
+        src.Play();
+        StartCoroutine(WaitEnd(src, onComplete));
+    }
+
+    /// <summary>
+    /// Play a sound with loop option. Returns the AudioSource for control.
+    /// </summary>
+    public AudioSource PlaySound(string name, bool loop, Action onComplete = null)
+    {
+        var clip = GetClip(name);
+        if (clip == null) return null;
+
+        var src = GetSource();
+        src.clip = clip;
+        src.volume = soundVolume;
+        src.mute = muted;
+        src.loop = loop;
+        src.Play();
+        if (!loop)
+            StartCoroutine(WaitEnd(src, onComplete));
+        return src;
+    }
+
+    /// <summary>
+    /// Play a 3D sound at a world position.
+    /// </summary>
+    public void Play3DSound(string name, Vector3 position)
+    {
+        var clip = GetClip(name);
+        if (clip == null) return;
+        AudioSource.PlayClipAtPoint(clip, position, soundVolume);
+    }
+
+    /// <summary>
+    /// Play multiple sounds in sequence.
+    /// </summary>
+    public void PlayQueue(Action onComplete, params string[] names)
+    {
+        if (names == null || names.Length == 0) { onComplete?.Invoke(); return; }
+        StartCoroutine(QueueRoutine(onComplete, names, 0));
+    }
+
+    private IEnumerator QueueRoutine(Action onComplete, string[] names, int index)
+    {
+        if (index >= names.Length) { onComplete?.Invoke(); yield break; }
+
+        var clip = GetClip(names[index]);
+        if (clip == null) { StartCoroutine(QueueRoutine(onComplete, names, index + 1)); yield break; }
+
+        var src = GetSource();
+        src.clip = clip;
+        src.volume = soundVolume;
+        src.mute = muted;
+        src.loop = false;
+        src.Play();
+        yield return new WaitWhile(() => src.isPlaying);
+        ReturnSource(src);
+        StartCoroutine(QueueRoutine(onComplete, names, index + 1));
+    }
+
+    /// <summary>
+    /// Play multiple sounds simultaneously. Callback fires when all finish.
+    /// </summary>
+    public void PlaySimultaneous(Action onComplete, params string[] names)
+    {
+        if (names == null || names.Length == 0) { onComplete?.Invoke(); return; }
+        StartCoroutine(SimultaneousRoutine(onComplete, names));
+    }
+
+    private IEnumerator SimultaneousRoutine(Action onComplete, string[] names)
+    {
+        var sources = new List<AudioSource>();
+        foreach (var n in names)
         {
-            audioSource.volume = soundVolume;
-            audioSource.mute = mymute;
-            audioSource.clip = GetAudioClip(sounds[0]);
-            audioSource.clip.LoadAudioData();
-            audioSource.Play();
-            yield return new WaitForSeconds(audioSource.clip.length);
-            //a.Skip(2).Take(5).ToArray();
-            if (sounds.Length > 1)
+            var clip = GetClip(n);
+            if (clip == null) continue;
+            var src = GetSource();
+            src.clip = clip;
+            src.volume = soundVolume;
+            src.mute = muted;
+            src.loop = false;
+            src.Play();
+            sources.Add(src);
+        }
+
+        bool done = false;
+        while (!done)
+        {
+            done = true;
+            foreach (var s in sources)
             {
-                sounds = GetNewArray(sounds);
-                StartCoroutine(PlaySound1(action, sounds));
+                if (s.isPlaying) { done = false; break; }
             }
-            else
-                StartCoroutine(WaitPlayEnd(audioSource, action));
+            yield return null;
         }
+
+        foreach (var s in sources)
+            ReturnSource(s);
+
+        onComplete?.Invoke();
     }
 
-    int[] GetNewArray(int[] array)
+    #endregion
+
+    #region Control
+
+    public void StopAllSounds()
     {
-        int[] arr = new int[array.Length - 1];
-        for (int i = 0; i < arr.Length; i++)
+        foreach (var src in usedPool)
         {
-            arr[i] = array[i + 1];
+            if (src != null)
+            {
+                src.Stop();
+                src.loop = false;
+                unusedPool.Add(src);
+            }
         }
-        return arr;
+        usedPool.Clear();
     }
 
-    /// <summary>
-    /// 播放音效
-    /// </summary>
-    /// <param name="id"></param>
-    public void PlaySound(int id, Action action = null)
+    public bool IsPlaying()
     {
-        if (unusedSoundAudioSourceList.Count != 0)
-        {
-            AudioSource audioSource = UnusedToUsed();
-            audioSource.clip = GetAudioClip(id);
-            audioSource.clip.LoadAudioData();
-            audioSource.Play();
-
-            StartCoroutine(WaitPlayEnd(audioSource, action));
-        }
-        else
-        {
-            AddAudioSource();
-
-            AudioSource audioSource = UnusedToUsed();
-            audioSource.clip = GetAudioClip(id);
-            audioSource.clip.LoadAudioData();
-            audioSource.volume = soundVolume;
-            audioSource.loop = false;
-            audioSource.Play();
-
-            StartCoroutine(WaitPlayEnd(audioSource, action));
-        }
+        foreach (var src in usedPool)
+            if (src != null && src.isPlaying) return true;
+        return false;
     }
 
-    /// <summary>
-    /// 播放3d音效
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="position"></param>
-    public void Play3dSound(int id, Vector3 position)
+    public bool IsPlaying(string name)
     {
-        AudioClip ac = GetAudioClip(id);
-        AudioSource.PlayClipAtPoint(ac, position);
+        var clip = GetClip(name);
+        if (clip == null) return false;
+        foreach (var src in usedPool)
+            if (src != null && src.isPlaying && src.clip == clip) return true;
+        return false;
     }
 
-    /// <summary>
-    /// 当播放音效结束后，将其移至未使用集合
-    /// </summary>
-    /// <param name="audioSource"></param>
-    /// <returns></returns>
-    IEnumerator WaitPlayEnd(AudioSource audioSource, Action action)
-    {
-        yield return new WaitUntil(() => { return !audioSource.isPlaying; });
-        UsedToUnused(audioSource);
-        if (action != null)
-        {
-            action();
-        }
-    }
-
-    /// <summary>
-    /// 获取音频文件，获取后会缓存一份
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    private AudioClip GetAudioClip(int id)
-    {
-        if (!audioClipDict.ContainsKey(id))
-        {
-            if (!audioPathDict.ContainsKey(id))
-                return null;
-            AudioClip ac = Resources.Load(audioPathDict[id]) as AudioClip;
-            audioClipDict.Add(id, ac);
-        }
-        return audioClipDict[id];
-    }
-
-    /// <summary>
-    /// 添加音频组件
-    /// </summary> 
-    /// <returns></returns>
-    private AudioSource AddAudioSource()
-    {
-        if (unusedSoundAudioSourceList.Count != 0)
-        {
-            return UnusedToUsed();
-        }
-        else
-        {
-            AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-            unusedSoundAudioSourceList.Add(audioSource);
-            return audioSource;
-        }
-    }
-
-    /// <summary>
-    /// 将未使用的音频组件移至已使用集合里
-    /// </summary>
-    /// <returns></returns>
-    private AudioSource UnusedToUsed()
-    {
-        AudioSource audioSource = unusedSoundAudioSourceList[0];
-        unusedSoundAudioSourceList.RemoveAt(0);
-        usedSoundAudioSourceList.Add(audioSource);
-        return audioSource;
-    }
-
-    /// <summary>
-    /// 将使用完的音频组件移至未使用集合里
-    /// </summary>
-    /// <param name="audioSource"></param>
-    private void UsedToUnused(AudioSource audioSource)
-    {
-        if (usedSoundAudioSourceList.Contains(audioSource))
-        {
-            usedSoundAudioSourceList.Remove(audioSource);
-        }
-        if (unusedSoundAudioSourceList.Count >= poolCount)
-        {
-            Destroy(audioSource);
-        }
-        else if (audioSource != null && !unusedSoundAudioSourceList.Contains(audioSource))
-        {
-            unusedSoundAudioSourceList.Add(audioSource);
-        }
-    }
-
-    /// <summary>
-    /// 修改背景音乐音量
-    /// </summary>
-    /// <param name="volume"></param>
     public void ChangeMusicVolume(float volume)
     {
         musicVolume = volume;
         musicAudioSource.volume = volume;
-        PlayerPrefs.SetFloat(musicVolumePrefs, volume);
+        PlayerPrefs.SetFloat("MusicVolume", volume);
     }
 
-    /// <summary>
-    /// 背景音静音
-    /// </summary>
-    /// <param name="isMute"></param>
-    public void MusicMute(bool isMute)
-    {
-        musicAudioSource.mute = isMute;
-        mymute = isMute;
-    }
-
-    /// <summary>
-    /// 音效静音
-    /// </summary>
-    /// <param name="isMute"></param>
-    public void SoundMute(bool isMute)
-    {
-        for (int i = 0; i < unusedSoundAudioSourceList.Count; i++)
-        {
-            unusedSoundAudioSourceList[i].mute = isMute;
-        }
-    }
-
-    /// <summary>
-    /// 修改音效音量
-    /// </summary>
-    /// <param name="volume"></param>
     public void ChangeSoundVolume(float volume)
     {
         soundVolume = volume;
-        for (int i = 0; i < unusedSoundAudioSourceList.Count; i++)
-        {
-            unusedSoundAudioSourceList[i].volume = volume;
-        }
-        for (int i = 0; i < usedSoundAudioSourceList.Count; i++)
-        {
-            usedSoundAudioSourceList[i].volume = volume;
-        }
-        PlayerPrefs.SetFloat(soundVolumePrefs, volume);
-        Debug.LogError(volume);
+        foreach (var src in unusedPool) if (src) src.volume = volume;
+        foreach (var src in usedPool) if (src) src.volume = volume;
+        PlayerPrefs.SetFloat("SoundVolume", volume);
     }
+
+    public void MusicMute(bool isMute)
+    {
+        musicAudioSource.mute = isMute;
+        muted = isMute;
+    }
+
+    public void SoundMute(bool isMute)
+    {
+        muted = isMute;
+        foreach (var src in unusedPool) if (src) src.mute = isMute;
+        foreach (var src in usedPool) if (src) src.mute = isMute;
+    }
+
+    #endregion
+
+    #region Pool
+
+    private AudioSource GetSource()
+    {
+        if (unusedPool.Count > 0)
+            return TakeFromPool();
+
+        if (usedPool.Count < poolCount)
+        {
+            AddSource();
+            return TakeFromPool();
+        }
+
+        // Pool exhausted — create temporary
+        var src = gameObject.AddComponent<AudioSource>();
+        usedPool.Add(src);
+        return src;
+    }
+
+    private void AddSource()
+    {
+        var src = gameObject.AddComponent<AudioSource>();
+        unusedPool.Add(src);
+    }
+
+    private AudioSource TakeFromPool()
+    {
+        var src = unusedPool[0];
+        unusedPool.RemoveAt(0);
+        usedPool.Add(src);
+        return src;
+    }
+
+    private void ReturnSource(AudioSource src)
+    {
+        if (usedPool.Contains(src))
+            usedPool.Remove(src);
+
+        if (unusedPool.Count >= poolCount)
+        {
+            if (src) Destroy(src);
+        }
+        else if (src && !unusedPool.Contains(src))
+        {
+            unusedPool.Add(src);
+        }
+    }
+
+    private IEnumerator WaitEnd(AudioSource src, Action onComplete)
+    {
+        yield return new WaitWhile(() => src != null && src.isPlaying);
+        ReturnSource(src);
+        onComplete?.Invoke();
+    }
+
+    #endregion
 }

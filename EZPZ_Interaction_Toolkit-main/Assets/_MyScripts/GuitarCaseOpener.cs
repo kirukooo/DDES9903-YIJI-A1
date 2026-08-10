@@ -8,15 +8,16 @@ public class GuitarCaseOpener : MonoBehaviour
     public float openAngle = -120f;
     public float duration = 1f;
 
+    [Header("Audio")]
+    public string audioName = "OpenDoor";
+
     private bool isOpened = false;
     private bool isAnimating = false;
     private InteractableGeneral interactable;
-    private AudioSource audioSource;
 
     void Start()
     {
         interactable = GetComponent<InteractableGeneral>();
-        audioSource = GetComponent<AudioSource>();
 
         if (interactable != null)
         {
@@ -37,8 +38,7 @@ public class GuitarCaseOpener : MonoBehaviour
                 isAnimating = false;
                 isOpened = true;
 
-                if (audioSource != null && audioSource.clip != null)
-                    audioSource.Play();
+                AudioManager.Instance.PlaySound(audioName);
             });
     }
 }

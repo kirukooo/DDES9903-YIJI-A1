@@ -20,23 +20,23 @@ public class StageAudioTrigger : MonoBehaviour
 
     IEnumerator PlayFullAudio()
     {
-        var src = gameObject.AddComponent<AudioSource>();
-        src.clip = Resources.Load<AudioClip>("AudioClips/Full");
-        src.Play();
-
-        yield return new WaitWhile(() => src.isPlaying);
-
-        if (showInfo != null)
+        // Play "Full" audio via AudioManager
+        AudioManager.Instance.PlaySound("Full", () =>
         {
-            showInfo.SetActive(true);
-            var text = showInfo.GetComponent<Text>();
-            if (text == null)
-                text = showInfo.GetComponentInChildren<Text>();
-            if (text != null)
-                text.text = message;
-        }
+            if (showInfo != null)
+            {
+                showInfo.SetActive(true);
+                var text = showInfo.GetComponent<Text>();
+                if (text == null)
+                    text = showInfo.GetComponentInChildren<Text>();
+                if (text != null)
+                    text.text = message;
+            }
 
-        DimAllLights();
+            DimAllLights();
+        });
+
+        yield return null;
     }
 
     void DimAllLights()

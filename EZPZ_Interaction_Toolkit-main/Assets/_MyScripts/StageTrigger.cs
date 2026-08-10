@@ -27,9 +27,8 @@ public class StageTrigger : MonoBehaviour
         if (dist <= triggerRadius)
         {
             triggered = true;
-            var src = gameObject.AddComponent<AudioSource>();
-            src.clip = Resources.Load<AudioClip>("AudioClips/Full");
-            src.Play();
+            // Play "Full" audio via AudioManager
+            AudioManager.Instance.PlaySound("Full");
         }
     }
 }

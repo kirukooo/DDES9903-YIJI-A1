@@ -13,7 +13,6 @@ public class SpeakerButtonInteraction : MonoBehaviour
     public MonoBehaviour stageTrigger;
 
     private bool hasBeenPressed = false;
-    private AudioSource[] audioSources = new AudioSource[3];
 
     void Start()
     {
@@ -22,9 +21,6 @@ public class SpeakerButtonInteraction : MonoBehaviour
         {
             interactable.onPrimaryInteract.AddListener(OnButtonPressed);
         }
-
-        for (int i = 0; i < 3; i++)
-            audioSources[i] = gameObject.AddComponent<AudioSource>();
     }
 
     void OnButtonPressed()
@@ -36,9 +32,6 @@ public class SpeakerButtonInteraction : MonoBehaviour
         if (interactable != null)
             interactable.hoverText = "";
 
-        audioSources[0].clip = Resources.Load<AudioClip>("AudioClips/Guitar");
-        audioSources[1].clip = Resources.Load<AudioClip>("AudioClips/Piano");
-        audioSources[2].clip = Resources.Load<AudioClip>("AudioClips/Vocal");
         if (showInfo != null)
         {
             showInfo.SetActive(true);
@@ -48,27 +41,13 @@ public class SpeakerButtonInteraction : MonoBehaviour
             if (text != null)
                 text.text = message;
         }
-        foreach (var src in audioSources)
-            src.Play();
 
-        StartCoroutine(WaitForAudioFinish());
+        // Play Guitar, Piano, Vocal simultaneously via AudioManager
+        AudioManager.Instance.PlaySimultaneous(OnAllAudioFinished, "Guitar", "Piano", "Vocal");
     }
 
-    IEnumerator WaitForAudioFinish()
+    void OnAllAudioFinished()
     {
-        bool allDone = false;
-        while (!allDone)
-        {
-            allDone = true;
-            foreach (var src in audioSources)
-            {
-                if (src.isPlaying) { allDone = false; break; }
-            }
-            yield return null;
-        }
-
-     
-
         if (stageSpotlight != null)
             stageSpotlight.gameObject.SetActive(true);
 

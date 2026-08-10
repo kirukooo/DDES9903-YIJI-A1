@@ -85,6 +85,8 @@ public class PowerBoxController : MonoBehaviour
         if (leverPivot != null)
             leverPivot.DOLocalRotate(new Vector3(leverAngleOn, 0, 0), leverAnimDuration);
 
+        AudioManager.Instance.PlaySound("OpenDoor");
+
         onPowerOn?.Invoke();
     }
 
