@@ -18655,6 +18655,10 @@ MonoBehaviour:
   playButtonRenderer: {fileID: 2008034554}
   playButtonIdleColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   playButtonActiveColor: {r: 0.2, g: 0.8, b: 0.2, a: 1}
+  audioName: Redio
+  showInfo: {fileID: 1914324472}
+  showInfoText: {fileID: 1914324474}
+  message: The recording stopped on that day.
   isPlaying: 0
   onPlay:
     m_PersistentCalls:

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class TapeRecorderController : MonoBehaviour
@@ -14,6 +15,14 @@ public class TapeRecorderController : MonoBehaviour
     public Renderer playButtonRenderer;
     public Color playButtonIdleColor = new Color(0.8f, 0.8f, 0.8f, 1f);
     public Color playButtonActiveColor = new Color(0.2f, 0.8f, 0.2f, 1f);
+
+    [Header("Audio")]
+    public string audioName = "Redio";
+
+    [Header("Show Info")]
+    public GameObject showInfo;
+    public Text showInfoText;
+    public string message = "The recording stopped on that day.";
 
     [Header("State")]
     public bool isPlaying = false;
@@ -68,6 +77,18 @@ public class TapeRecorderController : MonoBehaviour
         }
 
         onPlay?.Invoke();
+
+        AudioManager.Instance.PlaySound(audioName, OnAudioFinished);
+    }
+
+    private void OnAudioFinished()
+    {
+        StopPlayback();
+
+        if (showInfoText != null)
+            showInfoText.text = message;
+        if (showInfo != null)
+            showInfo.SetActive(true);
     }
 
     public void StopPlayback()
