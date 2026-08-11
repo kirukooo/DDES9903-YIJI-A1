@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GuitarCaseOpener : MonoBehaviour
 {
@@ -10,6 +11,14 @@ public class GuitarCaseOpener : MonoBehaviour
 
     [Header("Audio")]
     public string audioName = "OpenDoor";
+
+    [Header("Show Info")]
+    public GameObject showInfo;
+    public Text showInfoText;
+    public string message = "The sound was still inside the case.";
+
+    [Header("Trigger Zone")]
+    public InteractableTrigger triggerZone;
 
     private bool isOpened = false;
     private bool isAnimating = false;
@@ -39,6 +48,15 @@ public class GuitarCaseOpener : MonoBehaviour
                 isOpened = true;
 
                 AudioManager.Instance.PlaySound(audioName);
+
+                // Disable trigger zone so its onTriggerExit -> Hide won't fire
+                if (triggerZone != null)
+                    triggerZone.enabled = false;
+
+                if (showInfoText != null)
+                    showInfoText.text = message;
+                if (showInfo != null)
+                    showInfo.SetActive(true);
             });
     }
 }

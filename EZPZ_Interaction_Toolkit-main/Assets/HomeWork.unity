@@ -7043,6 +7043,118 @@ Material:
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+--- !u!1 &827614967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 827614971}
+  - component: {fileID: 827614970}
+  - component: {fileID: 827614969}
+  - component: {fileID: 827614968}
+  m_Layer: 0
+  m_Name: CoiledWire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &827614968
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827614967}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.264, y: 0.156, z: 0.264}
+  m_Center: {x: 0, y: 0.078, z: 0}
+--- !u!23 &827614969
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827614967}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 05713862580acf74bb79eea416430c6c, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &827614970
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827614967}
+  m_Mesh: {fileID: 4300000, guid: 5b6e5aa878cea864bbfcd15876bda975, type: 2}
+--- !u!4 &827614971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827614967}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.3094474, y: 0.3094474, z: -0.63580054, w: 0.63580054}
+  m_LocalPosition: {x: -0.7060001, y: -0.07717928, z: 0.5255701}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1914914817}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &839041628
 GameObject:
   m_ObjectHideFlags: 0
@@ -17598,7 +17710,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1721781155}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -17846,7 +17958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PromptDisplay
   targetUI: {fileID: 1914324472}
   targetText: {fileID: 1914324474}
-  message: Please open this oldbox.
+  message: Open the guitar case.
 --- !u!114 &1738188737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19490,7 +19602,11 @@ MonoBehaviour:
   lidPivot: {fileID: 1378081551}
   openAngle: -120
   duration: 1
-  audioName: OpenDoor
+  audioName: Guitar
+  showInfo: {fileID: 1914324472}
+  showInfoText: {fileID: 1914324474}
+  message: The sound was still inside the case.
+  triggerZone: {fileID: 1738188737}
 --- !u!114 &1914914815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19575,13 +19691,14 @@ Transform:
   m_GameObject: {fileID: 1914914813}
   serializedVersion: 2
   m_LocalRotation: {x: -0.3094474, y: -0.3094474, z: 0.63580054, w: 0.63580054}
-  m_LocalPosition: {x: 6.87, y: 0.91, z: 7.4}
+  m_LocalPosition: {x: 6.87, y: 0.771, z: 7.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 766278200}
   - {fileID: 926973934}
   - {fileID: 1378081551}
+  - {fileID: 827614971}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -51.905, z: 90}
 --- !u!1 &1915692092
