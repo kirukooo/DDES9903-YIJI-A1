@@ -85,18 +85,30 @@ public class PowerBoxController : MonoBehaviour
 
     public void TogglePower()
     {
-        if (isOn) return;
-        isOn = true;
-        ApplyVisualState();
+        if (isOn)
+        {
+            // 第二次点击：关闭电源
+            isOn = false;
+            ApplyVisualState();
 
-        if (leverPivot != null)
-            leverPivot.DOLocalRotate(Vector3.zero, leverAnimDuration);
+            if (leverPivot != null)
+                leverPivot.DOLocalRotate(Vector3.zero, leverAnimDuration);
 
-        AudioManager.Instance.PlaySound("OpenDoor");
+            StartCoroutine(EndSequence());
+        }
+        else
+        {
+            // 第一次点击：开启电源
+            isOn = true;
+            ApplyVisualState();
 
-        onPowerOn?.Invoke();
+            if (leverPivot != null)
+                leverPivot.DOLocalRotate(new Vector3(leverAngleOn, 0, 0), leverAnimDuration);
 
-        StartCoroutine(EndSequence());
+            AudioManager.Instance.PlaySound("OpenDoor");
+
+            onPowerOn?.Invoke();
+        }
     }
 
     private IEnumerator EndSequence()
@@ -111,7 +123,6 @@ public class PowerBoxController : MonoBehaviour
         if (showInfo != null)
             showInfo.SetActive(false);
 
-        // Fade all lights to 0
         var lights = FindObjectsByType<Light>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         foreach (var l in lights)
         {
