@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 
@@ -29,6 +30,13 @@ public class PowerBoxController : MonoBehaviour
     [Header("Startup Delay")]
     public float startupDelay = 20f;
 
+    [Header("Show Info")]
+    public GameObject showInfo;
+    public Text showInfoText;
+    public string endMessage = "The room no longer had to remember it. The room became a room again. Some works are completed, some are kept, and some simply stop.";
+    public float endMessageDuration = 10f;
+    public float lightFadeDuration = 1f;
+
     [Header("State")]
     public bool isOn = false;
 
@@ -45,7 +53,6 @@ public class PowerBoxController : MonoBehaviour
         if (leverPivot != null)
             leverPivot.localRotation = Quaternion.Euler(leverAngleOff, 0, 0);
 
-        // Start disabled: gray light, lever not interactable
         SetDisabledState();
         StartCoroutine(StartupDelayRoutine());
     }
@@ -83,11 +90,33 @@ public class PowerBoxController : MonoBehaviour
         ApplyVisualState();
 
         if (leverPivot != null)
-            leverPivot.DOLocalRotate(new Vector3(leverAngleOn, 0, 0), leverAnimDuration);
+            leverPivot.DOLocalRotate(Vector3.zero, leverAnimDuration);
 
         AudioManager.Instance.PlaySound("OpenDoor");
 
         onPowerOn?.Invoke();
+
+        StartCoroutine(EndSequence());
+    }
+
+    private IEnumerator EndSequence()
+    {
+        if (showInfoText != null)
+            showInfoText.text = endMessage;
+        if (showInfo != null)
+            showInfo.SetActive(true);
+
+        yield return new WaitForSeconds(endMessageDuration);
+
+        if (showInfo != null)
+            showInfo.SetActive(false);
+
+        // Fade all lights to 0
+        var lights = FindObjectsByType<Light>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        foreach (var l in lights)
+        {
+            DOTween.To(() => l.intensity, v => l.intensity = v, 0f, lightFadeDuration);
+        }
     }
 
     private void ApplyVisualState()

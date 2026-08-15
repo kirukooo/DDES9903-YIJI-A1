@@ -28,9 +28,39 @@ public class TimedFlickerEvent : MonoBehaviour
     public GameObject selectImage;
     public float selectImageDelay = 2f;
 
+    private MonoBehaviour starterInputs;
+
     private void Start()
     {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            starterInputs = player.GetComponent("StarterAssetsInputs") as MonoBehaviour;
+
         StartCoroutine(FlickerRoutine());
+    }
+
+    private void UnlockCursor()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        if (starterInputs != null)
+        {
+            starterInputs.GetType().GetField("cursorLocked").SetValue(starterInputs, false);
+            starterInputs.GetType().GetField("cursorInputForLook").SetValue(starterInputs, false);
+        }
+    }
+
+    private void LockCursor()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        if (starterInputs != null)
+        {
+            starterInputs.GetType().GetField("cursorLocked").SetValue(starterInputs, true);
+            starterInputs.GetType().GetField("cursorInputForLook").SetValue(starterInputs, true);
+        }
     }
 
     private IEnumerator FlickerRoutine()
@@ -85,6 +115,8 @@ public class TimedFlickerEvent : MonoBehaviour
         yield return new WaitForSeconds(selectImageDelay);
         if (selectImage != null)
             selectImage.SetActive(true);
+
+        UnlockCursor();
     }
 
     private void ShowMessage(string msg)
