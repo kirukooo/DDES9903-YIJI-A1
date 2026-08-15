@@ -1,40 +1,39 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MicHoldFollow : MonoBehaviour
 {
-    private Holdable holdable;
-    private bool locked = false;
+    [Header("Show Info")]
+    public GameObject showInfo;
+    public Text showInfoText;
+    public string message = "I don\u2019t know if I can finish it tonight.";
+
+    private InteractableGeneral interactable;
+    private bool triggered = false;
 
     void Start()
     {
-        holdable = GetComponent<Holdable>();
+        interactable = GetComponent<InteractableGeneral>();
+
+        if (interactable != null)
+        {
+            interactable.onPrimaryInteract.AddListener(OnClick);
+        }
     }
 
-    void Update()
+    private void OnClick()
     {
-        if (locked || holdable == null) return;
+        if (triggered) return;
+        triggered = true;
 
-        if (holdable.moving && holdable.myRayManipulator != null)
-        {
-            locked = true;
-            var ri = holdable.myRayManipulator;
+        AudioManager.Instance.PlaySound("Mic", OnMicFinished);
+    }
 
-            // Disable collider so raycast can't hit it again
-            var col = GetComponent<Collider>();
-            if (col != null) col.enabled = false;
-
-            // Disable interaction so it can't be clicked/dropped
-            var ig = GetComponent<InteractableGeneral>();
-            if (ig != null) ig.enabled = false;
-
-            // Detach from RaycastInteractor without dropping
-            // Mic stays parented to pickupAttachPoint, following the player
-            holdable.moving = false;
-            ri.holdableSubject = null;
-            ri.subject = null;
-            holdable.myRayManipulator = null;
-
-            Debug.Log("MicHold locked to player, following camera");
-        }
+    private void OnMicFinished()
+    {
+        if (showInfoText != null)
+            showInfoText.text = message;
+        if (showInfo != null)
+            showInfo.SetActive(true);
     }
 }
