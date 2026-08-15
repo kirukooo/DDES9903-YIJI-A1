@@ -9022,10 +9022,16 @@ MonoBehaviour:
   flickerDuration: 2
   message1Duration: 5
   message2Duration: 2
+  message3Duration: 5
+  message4Duration: 5
   showInfo: {fileID: 1914324472}
   showInfoText: {fileID: 1914324474}
   message1: Final rehearsal detected. Playing unsaved session.
   message2: We have started again too many times.
+  message3: The final rehearsal is playing back.
+  message4: 'Stop.
+
+    It will never become the old version again.'
   audio1: 6
   audio2: 7
 --- !u!4 &950860037
