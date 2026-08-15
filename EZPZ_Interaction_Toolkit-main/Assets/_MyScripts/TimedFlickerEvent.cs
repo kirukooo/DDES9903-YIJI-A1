@@ -24,6 +24,10 @@ public class TimedFlickerEvent : MonoBehaviour
     public string audio1 = "6";
     public string audio2 = "7";
 
+    [Header("Select Image")]
+    public GameObject selectImage;
+    public float selectImageDelay = 2f;
+
     private void Start()
     {
         StartCoroutine(FlickerRoutine());
@@ -76,6 +80,11 @@ public class TimedFlickerEvent : MonoBehaviour
         ShowMessage(message4);
         yield return new WaitForSeconds(message4Duration);
         HideShowInfo();
+
+        // === Phase 5: Select Image ===
+        yield return new WaitForSeconds(selectImageDelay);
+        if (selectImage != null)
+            selectImage.SetActive(true);
     }
 
     private void ShowMessage(string msg)
