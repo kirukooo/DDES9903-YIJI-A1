@@ -228,8 +228,7 @@ public class RaycastInteractor : MonoBehaviour
             if (holdableSubject.dropOnKeyLift)
                 DropHoldable();
 
-
-            if (holdableSubject.moving)
+            if (holdableSubject != null && holdableSubject.moving)
             {
                 if (throwFlag)
                 {
