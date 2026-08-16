@@ -9663,7 +9663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef7cca6a97db984faff63fa792b272e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimedFlickerEvent
-  flickerDelay: 30
+  flickerDelay: 240
   flickerDuration: 2
   message1Duration: 5
   message2Duration: 2
