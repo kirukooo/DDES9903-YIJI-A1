@@ -16,6 +16,7 @@ public class Q2FlowController : MonoBehaviour
 
     [Header("Cassette & Archive")]
     public Renderer cassetteRenderer;
+    public Holdable cassetteHoldable;
     public Renderer[] archBoxRenderers;
     public Transform archDoor;
     public Vector3 archDoorClosedRotation = Vector3.zero;
@@ -33,18 +34,19 @@ public class Q2FlowController : MonoBehaviour
     public string endMessage = "The song remained unfinished.\nSome memories survive because they are not repaired.\nLeave the room.";
 
     [Header("Highlight")]
-    public Color highlightColor = new Color(1f, 0.85f, 0.3f, 1f);
-    public float highlightIntensity = 3f;
-    public float edgePower = 3f;
+    public Color outlineColor = new Color(1f, 0.85f, 0.3f, 1f);
+    public float outlineWidth = 0.02f;
 
     private bool q2Pressed = false;
     private bool cassetteTriggered = false;
     private bool cassettePlaced = false;
 
-    private Material edgeHighlightMat;
+    private Material outlineMat;
     private List<Material[]> archBoxOriginalMats = new List<Material[]>();
 
     private MonoBehaviour starterInputs;
+
+    private Collider cassetteCollider;
 
     void Start()
     {
@@ -53,7 +55,15 @@ public class Q2FlowController : MonoBehaviour
             starterInputs = player.GetComponent("StarterAssetsInputs") as MonoBehaviour;
 
         CacheArchBoxMaterials();
-        CreateEdgeHighlightMaterial();
+        CreateOutlineMaterial();
+
+        if (cassetteHoldable != null)
+        {
+            cassetteHoldable.enabled = false;
+            cassetteCollider = cassetteHoldable.GetComponent<Collider>();
+            if (cassetteCollider != null)
+                cassetteCollider.enabled = false;
+        }
     }
 
     public void OnQ2Pressed()
@@ -82,6 +92,15 @@ public class Q2FlowController : MonoBehaviour
 
         if (recTriggerZone != null)
             recTriggerZone.SetActive(true);
+
+        if (cassetteHoldable != null)
+        {
+            cassetteHoldable.enabled = true;
+            if (cassetteCollider == null)
+                cassetteCollider = cassetteHoldable.GetComponent<Collider>();
+            if (cassetteCollider != null)
+                cassetteCollider.enabled = true;
+        }
     }
 
     public void OnCassetteTriggered()
@@ -141,23 +160,22 @@ public class Q2FlowController : MonoBehaviour
         }
     }
 
-    private void CreateEdgeHighlightMaterial()
+    private void CreateOutlineMaterial()
     {
-        var shader = Shader.Find("Custom/EdgeHighlight");
+        var shader = Shader.Find("Custom/OutlineHighlight");
         if (shader == null)
         {
-            Debug.LogError("[Q2FlowController] Custom/EdgeHighlight shader not found!");
+            Debug.LogError("[Q2FlowController] Custom/OutlineHighlight shader not found!");
             return;
         }
-        edgeHighlightMat = new Material(shader);
-        edgeHighlightMat.SetColor("_EdgeColor", highlightColor);
-        edgeHighlightMat.SetFloat("_EdgePower", edgePower);
-        edgeHighlightMat.SetFloat("_EdgeIntensity", highlightIntensity);
+        outlineMat = new Material(shader);
+        outlineMat.SetColor("_OutlineColor", outlineColor);
+        outlineMat.SetFloat("_OutlineWidth", outlineWidth);
     }
 
     private void HighlightArchBox(bool on)
     {
-        if (edgeHighlightMat == null) return;
+        if (outlineMat == null) return;
 
         for (int i = 0; i < archBoxRenderers.Length; i++)
         {
@@ -169,7 +187,7 @@ public class Q2FlowController : MonoBehaviour
                 var newMats = new Material[mats.Length + 1];
                 for (int j = 0; j < mats.Length; j++)
                     newMats[j] = mats[j];
-                newMats[mats.Length] = edgeHighlightMat;
+                newMats[mats.Length] = outlineMat;
                 archBoxRenderers[i].materials = newMats;
             }
             else

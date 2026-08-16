@@ -7029,6 +7029,7 @@ MonoBehaviour:
   selectImage: {fileID: 1485590110}
   recTriggerZone: {fileID: 193391593}
   cassetteRenderer: {fileID: 1061336139}
+  cassetteHoldable: {fileID: 1061336143}
   archBoxRenderers:
   - {fileID: 1515657663}
   - {fileID: 310838785}
@@ -7051,9 +7052,8 @@ MonoBehaviour:
     are not repaired.
 
     Leave the room.'
-  highlightColor: {r: 1, g: 0.85, b: 0.3, a: 1}
-  highlightIntensity: 3
-  edgePower: 3
+  outlineColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+  outlineWidth: 0.02
 --- !u!4 &720596343
 Transform:
   m_ObjectHideFlags: 0
@@ -12453,7 +12453,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.99999994, y: 1, z: 1}
   m_Center: {x: 0.000000029802322, y: 0, z: 0}
@@ -12477,7 +12477,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1061336137}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46af44fc27f29524da026e4f9f3da44d, type: 3}
   m_Name: 
