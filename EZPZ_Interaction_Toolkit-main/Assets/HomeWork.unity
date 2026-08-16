@@ -2345,7 +2345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PromptDisplay
   targetUI: {fileID: 1914324472}
   targetText: {fileID: 1914324474}
-  message: Pick up the microphone for a sound check.
+  message: Try interacting with the microphone.
 --- !u!114 &205799702
 MonoBehaviour:
   m_ObjectHideFlags: 0
