@@ -21,8 +21,15 @@ public class SpeakerButtonInteraction : MonoBehaviour
     public string endMessage = "Go back to the corridor.";
     public float endMessageDuration = 5f;
 
+    [Header("Q1 Flow")]
+    public GameObject textTMP4;
+    public GameObject recordTriggerZone;
+    public string q1Message = "Now, please head to the stage.";
+    public float q1MessageDuration = 5f;
+
     private bool audioPressed = false;
     private bool q3Pressed = false;
+    private bool q1Pressed = false;
     private MonoBehaviour starterInputs;
 
     void Start()
@@ -36,6 +43,38 @@ public class SpeakerButtonInteraction : MonoBehaviour
         var player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
             starterInputs = player.GetComponent("StarterAssetsInputs") as MonoBehaviour;
+    }
+
+    // Called by Q1 button onClick
+    public void OnQ1Pressed()
+    {
+        if (q1Pressed) return;
+        q1Pressed = true;
+        StartCoroutine(Q1Sequence());
+    }
+
+    private IEnumerator Q1Sequence()
+    {
+        if (selectImage != null)
+            selectImage.SetActive(false);
+
+        LockCursor();
+
+        if (showInfoText != null)
+            showInfoText.text = q1Message;
+        if (showInfo != null)
+            showInfo.SetActive(true);
+
+        yield return new WaitForSeconds(q1MessageDuration);
+
+        if (showInfo != null)
+            showInfo.SetActive(false);
+
+        if (textTMP4 != null)
+            textTMP4.SetActive(true);
+
+        if (recordTriggerZone != null)
+            recordTriggerZone.SetActive(true);
     }
 
     // Called by Q3 button onClick — goes straight to EndSequence
@@ -61,7 +100,17 @@ public class SpeakerButtonInteraction : MonoBehaviour
         if (showInfo != null)
             showInfo.SetActive(true);
 
-        AudioManager.Instance.PlaySimultaneous(OnAllAudioFinished, "Guitar", "Piano", "Vocal");
+        if (q1Pressed)
+        {
+            if (stageTrigger is WuTaiTrigger wtt)
+                wtt.q1Flow = true;
+            if (stageTrigger != null)
+                stageTrigger.gameObject.SetActive(true);
+        }
+        else
+        {
+            AudioManager.Instance.PlaySimultaneous(OnAllAudioFinished, "Guitar", "Piano", "Vocal");
+        }
     }
 
     void OnAllAudioFinished()
