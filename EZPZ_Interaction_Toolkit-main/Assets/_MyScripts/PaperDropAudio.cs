@@ -27,6 +27,12 @@ public class PaperDropAudio : MonoBehaviour
         if (showInfo != null)
             ScreenMessageGate.Arm(showInfo);
 
+        StartCoroutine(DelayedNotify());
+    }
+
+    private IEnumerator DelayedNotify()
+    {
+        yield return new WaitForSeconds(5f);
         TimedFlickerEvent.NotifyObjectExplored("paper");
     }
 }
