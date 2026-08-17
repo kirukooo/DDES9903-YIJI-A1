@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class TimedFlickerEvent : MonoBehaviour
 {
@@ -29,7 +30,16 @@ public class TimedFlickerEvent : MonoBehaviour
     public GameObject selectImage;
     public float selectImageDelay = 2f;
 
+    [Header("Stage Spotlight (Audio 7)")]
+    public GameObject stageSpotlight;
+    public float roomBrightenMultiplier = 1.6f;
+    public float spotlightFadeDuration = 1f;
+
     private MonoBehaviour starterInputs;
+
+    private Light spotlightLight;
+    private readonly List<Light> roomLights = new List<Light>();
+    private readonly List<float> roomLightIntensities = new List<float>();
 
     private static TimedFlickerEvent instance;
     private static readonly HashSet<string> exploredIds = new HashSet<string>();
@@ -41,6 +51,22 @@ public class TimedFlickerEvent : MonoBehaviour
     void Awake()
     {
         instance = this;
+
+        // 未手动指定时自动查找场景根对象 StageSpotlight(默认未激活,GameObject.Find 找不到)
+        if (stageSpotlight == null)
+        {
+            foreach (var root in gameObject.scene.GetRootGameObjects())
+            {
+                if (root.name == "StageSpotlight")
+                {
+                    stageSpotlight = root;
+                    break;
+                }
+            }
+        }
+
+        if (stageSpotlight != null)
+            spotlightLight = stageSpotlight.GetComponentInChildren<Light>(true);
     }
 
     void OnDestroy()
@@ -149,6 +175,23 @@ public class TimedFlickerEvent : MonoBehaviour
         bool audio2Done = false;
         AudioManager.Instance.PlaySound(audio2, () => audio2Done = true);
 
+        // === 舞台聚光灯亮,同时房间整体变亮 ===
+        if (stageSpotlight != null)
+            stageSpotlight.SetActive(true);
+
+        roomLights.Clear();
+        roomLightIntensities.Clear();
+        foreach (var l in lights)
+        {
+            if (stageSpotlight != null && l.transform.IsChildOf(stageSpotlight.transform)) continue;
+
+            roomLights.Add(l);
+            roomLightIntensities.Add(l.intensity);
+            var lightRef = l;
+            DOTween.To(() => lightRef.intensity, v => lightRef.intensity = v,
+                lightRef.intensity * roomBrightenMultiplier, spotlightFadeDuration);
+        }
+
         ShowMessage(message3);
         yield return new WaitForSeconds(message3Duration);
         HideShowInfo();
@@ -156,9 +199,21 @@ public class TimedFlickerEvent : MonoBehaviour
         // Wait for audio 7 to finish
         yield return new WaitUntil(() => audio2Done);
 
-        // === Phase 4: Lights off → Message 4 ===
-        foreach (var l in lights)
-            l.enabled = false;
+        // === Phase 4: 聚光灯暗,房间灯光恢复原亮度 ===
+        if (spotlightLight != null)
+            DOTween.To(() => spotlightLight.intensity, v => spotlightLight.intensity = v, 0f, spotlightFadeDuration)
+                .OnComplete(() =>
+                {
+                    if (stageSpotlight != null)
+                        stageSpotlight.SetActive(false);
+                });
+
+        for (int i = 0; i < roomLights.Count; i++)
+        {
+            var lightRef = roomLights[i];
+            var target = roomLightIntensities[i];
+            DOTween.To(() => lightRef.intensity, v => lightRef.intensity = v, target, spotlightFadeDuration);
+        }
 
         ShowMessage(message4);
         yield return new WaitForSeconds(message4Duration);
