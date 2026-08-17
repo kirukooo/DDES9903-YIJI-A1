@@ -14228,19 +14228,7 @@ MonoBehaviour:
   disableOnEnter: 0
   onTriggerExit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1234047605}
-        m_TargetAssemblyTypeName: PromptDisplay, Assembly-CSharp
-        m_MethodName: Hide
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onTriggerStay:
     m_PersistentCalls:
       m_Calls: []
@@ -17040,7 +17028,6 @@ MonoBehaviour:
   lightFadeDuration: 1
   finalLightIntensity: 0.3
   juGuangDengFinalIntensity: 1
-  fullSongAudioName: Full
   q1Flow: 0
 --- !u!1 &1504418978
 GameObject:
@@ -22644,7 +22631,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   hoverText: Press PLAY
-  customTouchDistance: 3
+  customTouchDistance: 5
   heldText: 
   restrictSecondaryToHeldOnly: 0
   customHoldDistance: -1

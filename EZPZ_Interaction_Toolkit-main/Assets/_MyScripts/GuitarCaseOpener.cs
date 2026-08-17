@@ -11,7 +11,7 @@ public class GuitarCaseOpener : MonoBehaviour
     public float duration = 1f;
 
     [Header("Audio")]
-    public string audioName = "OpenDoor";
+    public string audioName = "Guitar";
 
     [Header("Show Info")]
     public GameObject showInfo;
@@ -50,16 +50,20 @@ public class GuitarCaseOpener : MonoBehaviour
 
                 TimedFlickerEvent.NotifyObjectExplored("guitar");
 
-                AudioManager.Instance.PlaySound(audioName);
-
                 // Disable trigger zone so its onTriggerExit -> Hide won't fire
                 if (triggerZone != null)
                     triggerZone.enabled = false;
 
-                if (showInfoText != null)
-                    showInfoText.text = message;
-                if (showInfo != null)
-                    ScreenMessageGate.Arm(showInfo);
+                // 播完吉他音频后再显示提示
+                AudioManager.Instance.PlaySound(audioName, ShowMessage);
             });
+    }
+
+    private void ShowMessage()
+    {
+        if (showInfoText != null)
+            showInfoText.text = message;
+        if (showInfo != null)
+            ScreenMessageGate.Arm(showInfo);
     }
 }

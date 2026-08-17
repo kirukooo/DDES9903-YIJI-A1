@@ -154,7 +154,8 @@ public class Q2FlowController : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = endMessage;
         if (showInfo != null)
-            showInfo.SetActive(true);
+            ScreenMessageGate.Arm(showInfo);
+        messageToken = ScreenMessageGate.Begin();
     }
 
     private void CacheArchBoxMaterials()
