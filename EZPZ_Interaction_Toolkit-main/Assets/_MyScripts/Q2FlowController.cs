@@ -25,6 +25,7 @@ public class Q2FlowController : MonoBehaviour
     [Header("Door")]
     public Animator doorAnimator;
     public string doorOpenTrigger = "open";
+    public GameObject doorCloseTriggerZone;
 
     [Header("Messages")]
     public string introMessage = "It's still in the tape recorder.";
@@ -148,6 +149,9 @@ public class Q2FlowController : MonoBehaviour
 
         if (doorAnimator != null)
             doorAnimator.SetTrigger(doorOpenTrigger);
+
+        if (doorCloseTriggerZone != null)
+            doorCloseTriggerZone.SetActive(true);
 
         yield return new WaitForSeconds(0.5f);
 
