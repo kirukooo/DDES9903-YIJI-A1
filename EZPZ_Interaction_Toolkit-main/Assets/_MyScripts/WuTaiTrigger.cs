@@ -22,6 +22,7 @@ public class WuTaiTrigger : MonoBehaviour
     public float lightFadeDuration = 1f;
     public float finalLightIntensity = 0.3f;
     public float juGuangDengFinalIntensity = 1f;
+    public string fullSongAudioName = "Full";
 
     [HideInInspector] public bool q1Flow = false;
 
@@ -64,20 +65,34 @@ public class WuTaiTrigger : MonoBehaviour
 
     private IEnumerator Q1FlowSequence()
     {
-        if (juGuangDeng != null)
-            juGuangDeng.SetActive(true);
-
-        bool audioDone = false;
-        AudioManager.Instance.PlaySound("dian", () => audioDone = true);
-        yield return new WaitUntil(() => audioDone);
-
+        // 聚光灯亮起
         if (juGuangDeng != null)
         {
+            juGuangDeng.SetActive(true);
             var jgdLight = juGuangDeng.GetComponent<Light>();
             if (jgdLight != null)
                 DOTween.To(() => jgdLight.intensity, v => jgdLight.intensity = v, juGuangDengFinalIntensity, lightFadeDuration);
         }
 
+        // 录音提示音
+        bool dianDone = false;
+        AudioManager.Instance.PlaySound("dian", () => dianDone = true);
+        yield return new WaitUntil(() => dianDone);
+
+        // 播放完整歌曲(8),玩家视角不锁定,可自由走动
+        bool fullDone = false;
+        AudioManager.Instance.PlaySound(fullSongAudioName, () => fullDone = true);
+        yield return new WaitUntil(() => fullDone);
+
+        // 歌曲播完:聚光灯暗
+        if (juGuangDeng != null)
+        {
+            var jgdLight = juGuangDeng.GetComponent<Light>();
+            if (jgdLight != null)
+                DOTween.To(() => jgdLight.intensity, v => jgdLight.intensity = v, 0f, lightFadeDuration);
+        }
+
+        // 全屋变暗但不要全黑
         var lights = FindObjectsByType<Light>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         foreach (var l in lights)
         {
@@ -85,6 +100,7 @@ public class WuTaiTrigger : MonoBehaviour
             DOTween.To(() => l.intensity, v => l.intensity = v, finalLightIntensity, lightFadeDuration);
         }
 
+        // 出口门打开
         if (doorAnimator != null)
             doorAnimator.SetTrigger(doorOpenTrigger);
 

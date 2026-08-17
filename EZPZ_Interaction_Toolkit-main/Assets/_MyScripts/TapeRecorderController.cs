@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -23,6 +24,7 @@ public class TapeRecorderController : MonoBehaviour
     public GameObject showInfo;
     public Text showInfoText;
     public string message = "The recording stopped on that day.";
+    public float messageDuration = 5f;
 
     [Header("State")]
     public bool isPlaying = false;
@@ -90,7 +92,17 @@ public class TapeRecorderController : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = message;
         if (showInfo != null)
+        {
             showInfo.SetActive(true);
+            StartCoroutine(HideAfterSeconds());
+        }
+    }
+
+    private IEnumerator HideAfterSeconds()
+    {
+        yield return new WaitForSeconds(messageDuration);
+        if (showInfo != null)
+            showInfo.SetActive(false);
     }
 
     public void StopPlayback()

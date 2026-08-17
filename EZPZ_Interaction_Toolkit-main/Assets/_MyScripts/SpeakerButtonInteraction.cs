@@ -50,6 +50,7 @@ public class SpeakerButtonInteraction : MonoBehaviour
     {
         if (q1Pressed) return;
         q1Pressed = true;
+        PowerBoxController.EndingTracker.Select(PowerBoxController.EndingChoice.A);
         StartCoroutine(Q1Sequence());
     }
 
@@ -82,6 +83,7 @@ public class SpeakerButtonInteraction : MonoBehaviour
     {
         if (q3Pressed) return;
         q3Pressed = true;
+        PowerBoxController.EndingTracker.Select(PowerBoxController.EndingChoice.C);
         StartCoroutine(EndSequence());
     }
 

@@ -70,6 +70,7 @@ public class Q2FlowController : MonoBehaviour
     {
         if (q2Pressed) return;
         q2Pressed = true;
+        PowerBoxController.EndingTracker.Select(PowerBoxController.EndingChoice.B);
         StartCoroutine(Q2Sequence());
     }
 

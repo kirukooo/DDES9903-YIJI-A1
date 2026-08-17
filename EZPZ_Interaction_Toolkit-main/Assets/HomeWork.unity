@@ -10825,6 +10825,9 @@ MonoBehaviour:
   audio2: 7
   selectImage: {fileID: 1485590110}
   selectImageDelay: 2
+  stageSpotlight: {fileID: 0}
+  roomBrightenMultiplier: 1.6
+  spotlightFadeDuration: 1
 --- !u!4 &950860037
 Transform:
   m_ObjectHideFlags: 0
@@ -19379,7 +19382,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1690554185}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 759bfa15d7efcb74e905d2c2c21b2b9f, type: 3}
   m_Name: 

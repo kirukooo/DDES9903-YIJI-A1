@@ -35,6 +35,8 @@ public class PowerBoxController : MonoBehaviour
     public Text showInfoText;
     public string endMessage = "The room no longer had to remember it. The room became a room again. Some works are completed, some are kept, and some simply stop.";
     public float endMessageDuration = 10f;
+    public string shortEndMessage = "Some works are completed, some are kept, and some simply stop.";
+    public float shortEndMessageDuration = 5f;
     public float lightFadeDuration = 1f;
 
     [Header("State")]
@@ -44,6 +46,21 @@ public class PowerBoxController : MonoBehaviour
     public UnityEvent onPowerOn;
 
     private Material indicatorMat;
+
+    public enum EndingChoice { None, A, B, C }
+
+    /// <summary>全局结局选择状态,供三结局入口标记、关电源时读取。</summary>
+    public static class EndingTracker
+    {
+        public static EndingChoice Current { get; private set; } = EndingChoice.None;
+
+        public static void Select(EndingChoice choice)
+        {
+            if (Current != EndingChoice.None) return;
+            Current = choice;
+            Debug.Log($"[PowerBoxController] Ending selected: {choice}");
+        }
+    }
 
     private void Start()
     {
@@ -113,12 +130,18 @@ public class PowerBoxController : MonoBehaviour
 
     private IEnumerator EndSequence()
     {
+        // A/B 结局用短文案(5秒),C(或未选择时兜底)用长文案(10秒)
+        bool shortEnding = EndingTracker.Current == EndingChoice.A
+                        || EndingTracker.Current == EndingChoice.B;
+        string msg = shortEnding ? shortEndMessage : endMessage;
+        float duration = shortEnding ? shortEndMessageDuration : endMessageDuration;
+
         if (showInfoText != null)
-            showInfoText.text = endMessage;
+            showInfoText.text = msg;
         if (showInfo != null)
             showInfo.SetActive(true);
 
-        yield return new WaitForSeconds(endMessageDuration);
+        yield return new WaitForSeconds(duration);
 
         if (showInfo != null)
             showInfo.SetActive(false);
