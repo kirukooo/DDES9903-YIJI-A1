@@ -47,6 +47,8 @@ public class GuitarCaseOpener : MonoBehaviour
                 isAnimating = false;
                 isOpened = true;
 
+                TimedFlickerEvent.NotifyObjectExplored("guitar");
+
                 AudioManager.Instance.PlaySound(audioName);
 
                 // Disable trigger zone so its onTriggerExit -> Hide won't fire

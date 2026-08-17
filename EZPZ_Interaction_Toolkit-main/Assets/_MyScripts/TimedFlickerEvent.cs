@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,13 +31,67 @@ public class TimedFlickerEvent : MonoBehaviour
 
     private MonoBehaviour starterInputs;
 
+    private static TimedFlickerEvent instance;
+    private static readonly HashSet<string> exploredIds = new HashSet<string>();
+    private bool conflictTriggered = false;
+    private Coroutine timerRoutine;
+
+    public const int RequiredExploreCount = 4;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    void OnDestroy()
+    {
+        if (instance == this)
+            instance = null;
+    }
+
+    /// <summary>
+    /// 四个物件(纸/吉他箱/录音机/麦克风)完成时调用;集齐即提前触发冲突事件。
+    /// </summary>
+    public static void NotifyObjectExplored(string objectId)
+    {
+        if (string.IsNullOrEmpty(objectId) || !exploredIds.Add(objectId)) return;
+
+        Debug.Log($"[TimedFlickerEvent] Object explored: {objectId} ({exploredIds.Count}/{RequiredExploreCount})");
+
+        if (exploredIds.Count >= RequiredExploreCount)
+            instance?.TryTriggerConflict();
+    }
+
+    /// <summary>
+    /// 触发冲突事件(全物件探索完成或4分钟计时,二选一,只触发一次)。
+    /// </summary>
+    public void TryTriggerConflict()
+    {
+        if (conflictTriggered) return;
+        conflictTriggered = true;
+
+        if (timerRoutine != null)
+        {
+            StopCoroutine(timerRoutine);
+            timerRoutine = null;
+        }
+
+        StartCoroutine(FlickerRoutine());
+    }
+
     private void Start()
     {
         var player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
             starterInputs = player.GetComponent("StarterAssetsInputs") as MonoBehaviour;
 
-        StartCoroutine(FlickerRoutine());
+        timerRoutine = StartCoroutine(TimerRoutine());
+    }
+
+    private IEnumerator TimerRoutine()
+    {
+        yield return new WaitForSeconds(flickerDelay);
+        TryTriggerConflict();
     }
 
     private void UnlockCursor()
@@ -65,8 +120,6 @@ public class TimedFlickerEvent : MonoBehaviour
 
     private IEnumerator FlickerRoutine()
     {
-        yield return new WaitForSeconds(flickerDelay);
-
         // === Phase 1: Lights flicker ===
         var lights = FindObjectsByType<Light>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 

@@ -21,6 +21,8 @@ public class PaperDropAudio : MonoBehaviour
 
     private void OnPianoFinished()
     {
+        TimedFlickerEvent.NotifyObjectExplored("paper");
+
         if (showInfoText != null)
             showInfoText.text = message;
         if (showInfo != null)
