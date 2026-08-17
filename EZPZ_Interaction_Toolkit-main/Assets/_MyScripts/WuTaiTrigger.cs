@@ -22,7 +22,6 @@ public class WuTaiTrigger : MonoBehaviour
     public float lightFadeDuration = 1f;
     public float finalLightIntensity = 0.3f;
     public float juGuangDengFinalIntensity = 1f;
-    public string fullSongAudioName = "Full";
 
     [HideInInspector] public bool q1Flow = false;
 
@@ -79,11 +78,6 @@ public class WuTaiTrigger : MonoBehaviour
         bool dianDone = false;
         AudioManager.Instance.PlaySound("dian", () => dianDone = true);
         yield return new WaitUntil(() => dianDone);
-
-        // 播放完整歌曲(8),玩家视角不锁定,可自由走动
-        bool fullDone = false;
-        AudioManager.Instance.PlaySound(fullSongAudioName, () => fullDone = true);
-        yield return new WaitUntil(() => fullDone);
 
         // 歌曲播完:聚光灯暗
         if (juGuangDeng != null)
