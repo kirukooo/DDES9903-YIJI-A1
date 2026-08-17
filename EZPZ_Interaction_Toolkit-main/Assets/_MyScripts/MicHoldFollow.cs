@@ -32,11 +32,11 @@ public class MicHoldFollow : MonoBehaviour
 
     private void OnMicFinished()
     {
-        TimedFlickerEvent.NotifyObjectExplored("mic");
-
         if (showInfoText != null)
             showInfoText.text = message;
         if (showInfo != null)
             ScreenMessageGate.Arm(showInfo);
+
+        TimedFlickerEvent.NotifyObjectExplored("mic");
     }
 }

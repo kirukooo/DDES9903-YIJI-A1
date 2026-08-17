@@ -86,12 +86,12 @@ public class TapeRecorderController : MonoBehaviour
     {
         StopPlayback();
 
-        TimedFlickerEvent.NotifyObjectExplored("recorder");
-
         if (showInfoText != null)
             showInfoText.text = message;
         if (showInfo != null)
             ScreenMessageGate.Arm(showInfo);
+
+        TimedFlickerEvent.NotifyObjectExplored("recorder");
     }
 
     public void StopPlayback()

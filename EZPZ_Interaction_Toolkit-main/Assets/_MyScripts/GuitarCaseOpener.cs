@@ -48,8 +48,6 @@ public class GuitarCaseOpener : MonoBehaviour
                 isAnimating = false;
                 isOpened = true;
 
-                TimedFlickerEvent.NotifyObjectExplored("guitar");
-
                 // Disable trigger zone so its onTriggerExit -> Hide won't fire
                 if (triggerZone != null)
                     triggerZone.enabled = false;
@@ -65,5 +63,7 @@ public class GuitarCaseOpener : MonoBehaviour
             showInfoText.text = message;
         if (showInfo != null)
             ScreenMessageGate.Arm(showInfo);
+
+        TimedFlickerEvent.NotifyObjectExplored("guitar");
     }
 }
