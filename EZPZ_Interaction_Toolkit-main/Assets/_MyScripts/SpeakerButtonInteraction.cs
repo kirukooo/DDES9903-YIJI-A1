@@ -31,6 +31,7 @@ public class SpeakerButtonInteraction : MonoBehaviour
     private bool q3Pressed = false;
     private bool q1Pressed = false;
     private MonoBehaviour starterInputs;
+    private uint messageToken;
 
     void Start()
     {
@@ -64,11 +65,12 @@ public class SpeakerButtonInteraction : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = q1Message;
         if (showInfo != null)
-            showInfo.SetActive(true);
+            ScreenMessageGate.Arm(showInfo);
+        messageToken = ScreenMessageGate.Begin();
 
         yield return new WaitForSeconds(q1MessageDuration);
 
-        if (showInfo != null)
+        if (showInfo != null && ScreenMessageGate.CanHide(messageToken))
             showInfo.SetActive(false);
 
         if (textTMP4 != null)
@@ -142,11 +144,12 @@ public class SpeakerButtonInteraction : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = endMessage;
         if (showInfo != null)
-            showInfo.SetActive(true);
+            ScreenMessageGate.Arm(showInfo);
+        messageToken = ScreenMessageGate.Begin();
 
         yield return new WaitForSeconds(endMessageDuration);
 
-        if (showInfo != null)
+        if (showInfo != null && ScreenMessageGate.CanHide(messageToken))
             showInfo.SetActive(false);
     }
 

@@ -27,6 +27,7 @@ public class WuTaiTrigger : MonoBehaviour
     [HideInInspector] public bool q1Flow = false;
 
     private bool triggered = false;
+    private uint messageToken;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -110,16 +111,20 @@ public class WuTaiTrigger : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = q1EndMessage1;
         if (showInfo != null)
-            showInfo.SetActive(true);
+            ScreenMessageGate.Arm(showInfo);
+        messageToken = ScreenMessageGate.Begin();
 
         yield return new WaitForSeconds(q1MessageDuration);
 
         if (showInfoText != null)
             showInfoText.text = q1EndMessage2;
+        if (showInfo != null)
+            ScreenMessageGate.Arm(showInfo);
+        messageToken = ScreenMessageGate.Begin();
 
         yield return new WaitForSeconds(q1MessageDuration);
 
-        if (showInfo != null)
+        if (showInfo != null && ScreenMessageGate.CanHide(messageToken))
             showInfo.SetActive(false);
     }
 }

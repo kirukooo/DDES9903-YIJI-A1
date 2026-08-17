@@ -17,7 +17,6 @@ public class GuitarCaseOpener : MonoBehaviour
     public GameObject showInfo;
     public Text showInfoText;
     public string message = "The sound was still inside the case.";
-    public float messageDuration = 5f;
 
     [Header("Trigger Zone")]
     public InteractableTrigger triggerZone;
@@ -60,17 +59,7 @@ public class GuitarCaseOpener : MonoBehaviour
                 if (showInfoText != null)
                     showInfoText.text = message;
                 if (showInfo != null)
-                {
-                    showInfo.SetActive(true);
-                    StartCoroutine(HideAfterSeconds());
-                }
+                    ScreenMessageGate.Arm(showInfo);
             });
-    }
-
-    private IEnumerator HideAfterSeconds()
-    {
-        yield return new WaitForSeconds(messageDuration);
-        if (showInfo != null)
-            showInfo.SetActive(false);
     }
 }

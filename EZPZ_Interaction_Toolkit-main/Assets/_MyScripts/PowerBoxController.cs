@@ -46,6 +46,7 @@ public class PowerBoxController : MonoBehaviour
     public UnityEvent onPowerOn;
 
     private Material indicatorMat;
+    private uint messageToken;
 
     public enum EndingChoice { None, A, B, C }
 
@@ -139,11 +140,12 @@ public class PowerBoxController : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = msg;
         if (showInfo != null)
-            showInfo.SetActive(true);
+            ScreenMessageGate.Arm(showInfo, duration);
+        messageToken = ScreenMessageGate.Begin();
 
         yield return new WaitForSeconds(duration);
 
-        if (showInfo != null)
+        if (showInfo != null && ScreenMessageGate.CanHide(messageToken))
             showInfo.SetActive(false);
 
         var lights = FindObjectsByType<Light>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);

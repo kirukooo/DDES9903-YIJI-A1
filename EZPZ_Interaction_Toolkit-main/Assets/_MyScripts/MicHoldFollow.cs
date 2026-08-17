@@ -8,7 +8,6 @@ public class MicHoldFollow : MonoBehaviour
     public GameObject showInfo;
     public Text showInfoText;
     public string message = "I don\u2019t know if I can finish it tonight.";
-    public float messageDuration = 5f;
 
     private InteractableGeneral interactable;
     private bool triggered = false;
@@ -38,16 +37,6 @@ public class MicHoldFollow : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = message;
         if (showInfo != null)
-        {
-            showInfo.SetActive(true);
-            StartCoroutine(HideAfterSeconds());
-        }
-    }
-
-    private IEnumerator HideAfterSeconds()
-    {
-        yield return new WaitForSeconds(messageDuration);
-        if (showInfo != null)
-            showInfo.SetActive(false);
+            ScreenMessageGate.Arm(showInfo);
     }
 }

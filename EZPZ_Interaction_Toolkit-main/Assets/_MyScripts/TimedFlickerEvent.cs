@@ -227,17 +227,20 @@ public class TimedFlickerEvent : MonoBehaviour
         UnlockCursor();
     }
 
+    private uint messageToken;
+
     private void ShowMessage(string msg)
     {
         if (showInfoText != null)
             showInfoText.text = msg;
         if (showInfo != null)
-            showInfo.SetActive(true);
+            ScreenMessageGate.Arm(showInfo);
+        messageToken = ScreenMessageGate.Begin();
     }
 
     private void HideShowInfo()
     {
-        if (showInfo != null)
+        if (showInfo != null && ScreenMessageGate.CanHide(messageToken))
             showInfo.SetActive(false);
     }
 }

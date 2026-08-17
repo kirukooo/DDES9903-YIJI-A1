@@ -19,12 +19,15 @@ public class PromptDisplay : MonoBehaviour
         if (targetText != null)
             targetText.text = message;
         if (targetUI != null)
-            targetUI.SetActive(true);
+            ScreenMessageGate.Arm(targetUI);
+        messageToken = ScreenMessageGate.Begin();
     }
 
     public void Hide()
     {
-        if (targetUI != null)
+        if (targetUI != null && ScreenMessageGate.CanHide(messageToken))
             targetUI.SetActive(false);
     }
+
+    private uint messageToken;
 }

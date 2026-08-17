@@ -46,6 +46,8 @@ public class Q2FlowController : MonoBehaviour
 
     private MonoBehaviour starterInputs;
 
+    private uint messageToken;
+
     private Collider cassetteCollider;
 
     void Start()
@@ -84,11 +86,12 @@ public class Q2FlowController : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = introMessage;
         if (showInfo != null)
-            showInfo.SetActive(true);
+            ScreenMessageGate.Arm(showInfo);
+        messageToken = ScreenMessageGate.Begin();
 
         yield return new WaitForSeconds(introMessageDuration);
 
-        if (showInfo != null)
+        if (showInfo != null && ScreenMessageGate.CanHide(messageToken))
             showInfo.SetActive(false);
 
         if (recTriggerZone != null)
@@ -112,7 +115,8 @@ public class Q2FlowController : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = placeMessage;
         if (showInfo != null)
-            showInfo.SetActive(true);
+            ScreenMessageGate.Arm(showInfo);
+        messageToken = ScreenMessageGate.Begin();
 
         HighlightArchBox(true);
     }
@@ -130,7 +134,8 @@ public class Q2FlowController : MonoBehaviour
         if (showInfoText != null)
             showInfoText.text = closeLidMessage;
         if (showInfo != null)
-            showInfo.SetActive(true);
+            ScreenMessageGate.Arm(showInfo);
+        messageToken = ScreenMessageGate.Begin();
 
         yield return new WaitForSeconds(2f);
 
